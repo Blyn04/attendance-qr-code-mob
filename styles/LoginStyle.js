@@ -3,11 +3,11 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f0eb",
+    backgroundColor: "#0d1b2a", // dark navy background
     justifyContent: "center",
     alignItems: "center",
   },
-  
+
   loaderOverlay: {
     position: "absolute",
     top: 0, left: 0, right: 0, bottom: 0,
@@ -33,11 +33,11 @@ export default StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#2e1e17",
+    color: "#ffffff", // white text
   },
 
   error: {
-    color: "red",
+    color: "#ff4d4d",
     marginBottom: 10,
     textAlign: "center",
   },
@@ -45,12 +45,12 @@ export default StyleSheet.create({
   input: {
     width: "100%",
     height: 45,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#5f7481", // muted blue-gray border
   },
 
   passwordWrapper: {
@@ -58,16 +58,16 @@ export default StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  
+
   inputPassword: {
     flex: 1,
     height: 45,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#5f7481",
   },
 
   eyeIcon: {
@@ -78,13 +78,13 @@ export default StyleSheet.create({
   forgotText: {
     alignSelf: "flex-end",
     marginTop: 5,
-    color: "#7c5132",
+    color: "#aec6cf", // soft bluish text
     textDecorationLine: "underline",
   },
 
   loginButton: {
     marginTop: 20,
-    backgroundColor: "#7c5132",
+    backgroundColor: "#1b263b", // darker navy button
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
@@ -93,7 +93,7 @@ export default StyleSheet.create({
   },
 
   loginButtonText: {
-    color: "#fff",
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -107,7 +107,7 @@ export default StyleSheet.create({
 
   modalContent: {
     width: "85%",
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
@@ -118,10 +118,11 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#1b263b",
   },
 
   resetButton: {
-    backgroundColor: "#7c5132",
+    backgroundColor: "#1b263b",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -129,7 +130,7 @@ export default StyleSheet.create({
   },
 
   resetButtonText: {
-    color: "#fff",
+    color: "#ffffff",
     fontWeight: "bold",
   },
 
@@ -144,7 +145,7 @@ export default StyleSheet.create({
   },
 
   closeButtonText: {
-    color: "#7c5132",
+    color: "#1b263b",
     textDecorationLine: "underline",
   },
 });
