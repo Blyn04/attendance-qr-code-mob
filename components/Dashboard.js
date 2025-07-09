@@ -8,7 +8,7 @@ export default function Dashboard() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
+      <Text style={styles.pageTitle}>Attendance Tracker</Text>
 
       <TouchableOpacity
         style={styles.button}
@@ -23,7 +23,7 @@ export default function Dashboard() {
       >
         <Text style={styles.buttonText}>QR Scanner</Text>
       </TouchableOpacity>
+
     </View>
   );
 }
-

@@ -3,24 +3,25 @@ import { StyleSheet } from 'react-native';
 const DashboardStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // white background
+    backgroundColor: "#ffffff",
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
   },
-  
-  title: {
-    fontSize: 28,
+
+  pageTitle: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#0d1b2a', // dark navy
-    marginBottom: 32,
+    color: '#0d1b2a',
+    marginBottom: 40,
+    textAlign: 'center',
   },
 
   button: {
     width: '80%',
     padding: 18,
     marginVertical: 10,
-    backgroundColor: '#1b263b', // navy button
+    backgroundColor: '#1b263b',
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
@@ -30,7 +31,7 @@ const DashboardStyle = StyleSheet.create({
   },
 
   buttonText: {
-    color: '#ffffff', // white text
+    color: '#ffffff',
     fontSize: 18,
     fontWeight: '600',
   },
