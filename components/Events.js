@@ -3,37 +3,26 @@ import {
   View,
   Text,
   FlatList,
-  Modal,
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Modal,
   Alert,
-  Platform,
 } from "react-native";
 import {
   collection,
-  addDoc,
   getDocs,
   onSnapshot,
-  doc,
-  setDoc,
 } from "firebase/firestore";
 import { db } from "../config/FirebaseConfig";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "../styles/EventsStyle";
 import dayjs from "dayjs";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [title, setTitle] = useState("");
-  const [room, setRoom] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
-  const [formDeadline, setFormDeadline] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [registrations, setRegistrations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "events"), (snapshot) => {
@@ -47,44 +36,6 @@ const Events = () => {
 
     return () => unsub();
   }, []);
-
-  const handleAddEvent = async () => {
-    if (!title || !room || !date || !startTime || !endTime) {
-      return Alert.alert("Error", "Please fill in all fields.");
-    }
-
-    try {
-      const docRef = await addDoc(collection(db, "events"), {
-        title,
-        room,
-        date: dayjs(date).format("YYYY-MM-DD"),
-        startTime: dayjs(startTime).format("HH:mm"),
-        endTime: dayjs(endTime).format("HH:mm"),
-        formDeadline: formDeadline.toISOString(),
-      });
-
-      const defaultForm = {
-        questions: [
-          { type: "text", label: "Full Name", required: true },
-          { type: "email", label: "Email", required: true },
-          { type: "text", label: "Year", required: true },
-          { type: "text", label: "Section (Format: INF###)", required: true },
-          { type: "checkbox", label: "Photo Consent" },
-          { type: "checkbox", label: "Video Consent" },
-          { type: "checkbox", label: "Agree to Data Privacy Policy", required: true },
-        ],
-      };
-
-      await setDoc(doc(db, "events", docRef.id, "form", "template"), defaultForm);
-
-      setModalVisible(false);
-      setTitle("");
-      setRoom("");
-    } catch (err) {
-      console.error(err);
-      Alert.alert("Error", "Failed to add event.");
-    }
-  };
 
   const openEventDetails = async (event) => {
     setSelectedEvent(event);
@@ -102,68 +53,32 @@ const Events = () => {
     </TouchableOpacity>
   );
 
+  const filteredEvents = events.filter((event) => {
+    const title = event.title || "";
+    const room = event.room || "";
+    return (
+        title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        room.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Admin Events</Text>
 
-      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-        <Text style={styles.addButtonText}>Add Event</Text>
-      </TouchableOpacity>
+      <TextInput
+        style={styles.input}
+        placeholder="Search by title or room..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
 
       <FlatList
-        data={events}
+        data={filteredEvents}
         keyExtractor={(item) => item.id}
         renderItem={renderEvent}
         contentContainerStyle={styles.eventList}
       />
-
-      {/* Add Event Modal */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <ScrollView contentContainerStyle={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add New Event</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Event Title"
-              value={title}
-              onChangeText={setTitle}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Venue / Room"
-              value={room}
-              onChangeText={setRoom}
-            />
-
-            <Text style={styles.label}>Date:</Text>
-            <DateTimePicker value={date} mode="date" onChange={(e, val) => val && setDate(val)} />
-
-            <Text style={styles.label}>Start Time:</Text>
-            <DateTimePicker value={startTime} mode="time" onChange={(e, val) => val && setStartTime(val)} />
-
-            <Text style={styles.label}>End Time:</Text>
-            <DateTimePicker value={endTime} mode="time" onChange={(e, val) => val && setEndTime(val)} />
-
-            <Text style={styles.label}>Form Deadline:</Text>
-            <DateTimePicker value={formDeadline} mode="datetime" onChange={(e, val) => val && setFormDeadline(val)} />
-
-            <TouchableOpacity style={styles.submitButton} onPress={handleAddEvent}>
-              <Text style={styles.submitButtonText}>Create Event</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </Modal>
 
       {/* Selected Event Details */}
       <Modal
