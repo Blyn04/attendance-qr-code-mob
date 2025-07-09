@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Platform,
 } from "react-native";
 import {
   collection,
@@ -117,68 +118,86 @@ const Events = () => {
       />
 
       {/* Add Event Modal */}
-      <Modal visible={modalVisible} animationType="slide">
-        <ScrollView style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Add New Event</Text>
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add New Event</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Event Title"
-            value={title}
-            onChangeText={setTitle}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Event Title"
+              value={title}
+              onChangeText={setTitle}
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Venue / Room"
-            value={room}
-            onChangeText={setRoom}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Venue / Room"
+              value={room}
+              onChangeText={setRoom}
+            />
 
-          <Text style={styles.label}>Date:</Text>
-          <DateTimePicker value={date} mode="date" onChange={(e, val) => setDate(val)} />
+            <Text style={styles.label}>Date:</Text>
+            <DateTimePicker value={date} mode="date" onChange={(e, val) => val && setDate(val)} />
 
-          <Text style={styles.label}>Start Time:</Text>
-          <DateTimePicker value={startTime} mode="time" onChange={(e, val) => setStartTime(val)} />
+            <Text style={styles.label}>Start Time:</Text>
+            <DateTimePicker value={startTime} mode="time" onChange={(e, val) => val && setStartTime(val)} />
 
-          <Text style={styles.label}>End Time:</Text>
-          <DateTimePicker value={endTime} mode="time" onChange={(e, val) => setEndTime(val)} />
+            <Text style={styles.label}>End Time:</Text>
+            <DateTimePicker value={endTime} mode="time" onChange={(e, val) => val && setEndTime(val)} />
 
-          <Text style={styles.label}>Form Deadline:</Text>
-          <DateTimePicker value={formDeadline} mode="datetime" onChange={(e, val) => setFormDeadline(val)} />
+            <Text style={styles.label}>Form Deadline:</Text>
+            <DateTimePicker value={formDeadline} mode="datetime" onChange={(e, val) => val && setFormDeadline(val)} />
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleAddEvent}>
-            <Text style={styles.submitButtonText}>Create Event</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.submitButton} onPress={handleAddEvent}>
+              <Text style={styles.submitButtonText}>Create Event</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-        </ScrollView>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </Modal>
 
       {/* Selected Event Details */}
-      <Modal visible={!!selectedEvent} animationType="slide">
-        <ScrollView style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
-          <Text>Room: {selectedEvent?.room}</Text>
-          <Text>Date: {selectedEvent?.date}</Text>
-          <Text>Time: {selectedEvent?.startTime} - {selectedEvent?.endTime}</Text>
-          <Text>Form Closes: {dayjs(selectedEvent?.formDeadline).format("YYYY-MM-DD HH:mm")}</Text>
-          <Text style={styles.sectionTitle}>Registrations ({registrations.length})</Text>
+      <Modal
+        visible={!!selectedEvent}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setSelectedEvent(null)}
+      >
+        <View style={styles.modalOverlay}>
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
+            <Text>Room: {selectedEvent?.room}</Text>
+            <Text>Date: {selectedEvent?.date}</Text>
+            <Text>
+              Time: {selectedEvent?.startTime} - {selectedEvent?.endTime}
+            </Text>
+            <Text>
+              Form Closes: {dayjs(selectedEvent?.formDeadline).format("YYYY-MM-DD HH:mm")}
+            </Text>
+            <Text style={styles.sectionTitle}>Registrations ({registrations.length})</Text>
 
-          {registrations.length === 0 ? (
-            <Text>No one has registered yet.</Text>
-          ) : (
-            registrations.map((reg, idx) => (
-              <Text key={idx}>• {reg.fullName} ({reg.email})</Text>
-            ))
-          )}
+            {registrations.length === 0 ? (
+              <Text>No one has registered yet.</Text>
+            ) : (
+              registrations.map((reg, idx) => (
+                <Text key={idx}>• {reg.fullName} ({reg.email})</Text>
+              ))
+            )}
 
-          <TouchableOpacity style={styles.cancelButton} onPress={() => setSelectedEvent(null)}>
-            <Text style={styles.cancelButtonText}>Close</Text>
-          </TouchableOpacity>
-        </ScrollView>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setSelectedEvent(null)}>
+              <Text style={styles.cancelButtonText}>Close</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </Modal>
     </View>
   );
