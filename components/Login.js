@@ -14,7 +14,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../config/FirebaseConfig";
-import { FontAwesome } from "@expo/vector-icons"; // ✅ Using Expo vector icons
+import { FontAwesome } from "@expo/vector-icons";
 import jpcsLogo from "../assets/jpcs.png";
 import styles from "../styles/LoginStyle";
 
@@ -44,6 +44,7 @@ const Login = () => {
           break;
 
         case "auth/wrong-password":
+        case "auth/invalid-credential": // ✅ handle this new code
           setError("Incorrect password. Please try again.");
           break;
 
@@ -85,7 +86,7 @@ const Login = () => {
     <View style={styles.container}>
       {loading && (
         <View style={styles.loaderOverlay}>
-          <ActivityIndicator size="large" color="#7c5132" />
+          <ActivityIndicator size="large" color="#0d1b2a" />
         </View>
       )}
 
@@ -122,7 +123,7 @@ const Login = () => {
             <FontAwesome
               name={showPassword ? "eye-slash" : "eye"}
               size={20}
-              color="#7c5132"
+              color="#0d1b2a"
             />
           </TouchableOpacity>
         </View>

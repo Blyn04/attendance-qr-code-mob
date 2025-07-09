@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0d1b2a", // dark navy background
+    backgroundColor: "#ffffff", // white background
     justifyContent: "center",
     alignItems: "center",
   },
@@ -33,7 +33,7 @@ export default StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#ffffff", // white text
+    color: "#0d1b2a", // dark navy
   },
 
   error: {
@@ -50,7 +50,8 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#5f7481", // muted blue-gray border
+    borderColor: "#1b263b", // navy border
+    color: "#0d1b2a", // input text color
   },
 
   passwordWrapper: {
@@ -67,24 +68,27 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#5f7481",
+    borderColor: "#1b263b",
+    color: "#0d1b2a", // input text color
   },
 
   eyeIcon: {
     position: "absolute",
     right: 15,
+    tintColor: "#1b263b", // ensure navy color for eye icon (for Image)
+    color: "#1b263b", // for Icon components like Feather or Ionicons
   },
 
   forgotText: {
     alignSelf: "flex-end",
     marginTop: 5,
-    color: "#aec6cf", // soft bluish text
+    color: "#1b263b", // navy
     textDecorationLine: "underline",
   },
 
   loginButton: {
     marginTop: 20,
-    backgroundColor: "#1b263b", // darker navy button
+    backgroundColor: "#0d1b2a", // navy button
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
@@ -93,7 +97,7 @@ export default StyleSheet.create({
   },
 
   loginButtonText: {
-    color: "#ffffff",
+    color: "#ffffff", // white text inside navy button
     fontSize: 16,
     fontWeight: "600",
   },
@@ -118,11 +122,11 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#1b263b",
+    color: "#0d1b2a",
   },
 
   resetButton: {
-    backgroundColor: "#1b263b",
+    backgroundColor: "#0d1b2a", // navy
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -136,7 +140,7 @@ export default StyleSheet.create({
 
   resetMessage: {
     marginTop: 10,
-    color: "#444",
+    color: "#1b263b", // navy-ish message
     textAlign: "center",
   },
 
@@ -145,7 +149,7 @@ export default StyleSheet.create({
   },
 
   closeButtonText: {
-    color: "#1b263b",
+    color: "#1b263b", // navy
     textDecorationLine: "underline",
   },
 });
