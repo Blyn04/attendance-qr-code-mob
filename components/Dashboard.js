@@ -12,9 +12,9 @@ export default function Dashboard() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Attendance")}
+        onPress={() => navigation.navigate("Events")}
       >
-        <Text style={styles.buttonText}>Attendance</Text>
+        <Text style={styles.buttonText}>Events</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -26,3 +26,4 @@ export default function Dashboard() {
     </View>
   );
 }
+
