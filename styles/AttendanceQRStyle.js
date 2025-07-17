@@ -50,4 +50,13 @@ export default StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
+
+  scanner: {
+    flex: 1,
+    width: "100%",
+    height: 300,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+
 });
