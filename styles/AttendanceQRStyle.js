@@ -1,32 +1,58 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
-  container: {
+  fullscreenContainer: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    alignItems: "center",
-  },
-  
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#1b263b",
+    position: "relative",
   },
 
   scanner: {
-    width: width * 0.9,
-    height: width * 0.9,
-    borderRadius: 20,
-    overflow: "hidden",
+    flex: 1,
   },
 
-  button: {
-    marginTop: 20,
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+
+  scanBox: {
+    width: width * 0.7,
+    height: width * 0.7,
+    borderColor: "#ffffff",
+    borderWidth: 2,
+    borderRadius: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+  },
+
+  backButton: {
+    position: "absolute",
+    top: 40,
+    left: 20,
+    backgroundColor: "#ffffffcc",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    zIndex: 10,
+  },
+
+  backButtonText: {
+    fontSize: 16,
+    color: "#1b263b",
+    fontWeight: "bold",
+  },
+
+  scanAgainButton: {
+    position: "absolute",
+    bottom: 100,
+    alignSelf: "center",
     backgroundColor: "#1b263b",
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -40,23 +66,36 @@ export default StyleSheet.create({
   },
 
   dataText: {
-    marginTop: 15,
+    position: "absolute",
+    bottom: 60,
+    alignSelf: "center",
     fontSize: 16,
-    color: "#0d1b2a",
+    color: "#ffffff",
+    backgroundColor: "rgba(0,0,0,0.6)",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
   },
-  
+
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+
   errorText: {
     color: "red",
     fontSize: 16,
     marginBottom: 10,
   },
 
-  scanner: {
-    flex: 1,
-    width: "100%",
-    height: 300,
+  button: {
+    marginTop: 20,
+    backgroundColor: "#1b263b",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
     borderRadius: 10,
-    overflow: "hidden",
   },
-
 });

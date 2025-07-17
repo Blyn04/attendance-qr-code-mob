@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/AttendanceQRStyle";
 
 const AttendanceQR = () => {
+  const navigation = useNavigation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [scannedData, setScannedData] = useState("");
@@ -40,8 +42,7 @@ const AttendanceQR = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Scan Attendance QR</Text>
+    <View style={styles.fullscreenContainer}>
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
         barcodeScannerSettings={{
@@ -49,11 +50,21 @@ const AttendanceQR = () => {
         }}
         style={styles.scanner}
       />
+
+      <View style={styles.overlay}>
+        <View style={styles.scanBox} />
+      </View>
+
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>← Back</Text>
+      </TouchableOpacity>
+
       {scanned && (
-        <TouchableOpacity style={styles.button} onPress={() => setScanned(false)}>
+        <TouchableOpacity style={styles.scanAgainButton} onPress={() => setScanned(false)}>
           <Text style={styles.buttonText}>Scan Again</Text>
         </TouchableOpacity>
       )}
+
       {scannedData ? (
         <Text style={styles.dataText}>Scanned: {scannedData}</Text>
       ) : null}
