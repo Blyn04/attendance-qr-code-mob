@@ -19,7 +19,7 @@ export default function Dashboard() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("QRScanner")}
+        onPress={() => navigation.navigate("AttendanceQR")} 
       >
         <Text style={styles.buttonText}>QR Scanner</Text>
       </TouchableOpacity>
