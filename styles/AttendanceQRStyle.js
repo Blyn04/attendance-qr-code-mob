@@ -19,9 +19,10 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: "center",
+    justifyContent: "flex-start", 
     alignItems: "center",
     backgroundColor: "transparent",
+    paddingTop: height * 0.22, 
   },
 
   scanBox: {
@@ -45,7 +46,7 @@ export default StyleSheet.create({
 
   backButton: {
     position: "absolute",
-    top: 40,
+    top: 80,
     left: 20,
     backgroundColor: "#ffffffcc",
     paddingHorizontal: 12,
@@ -61,13 +62,17 @@ export default StyleSheet.create({
   },
 
   scanAgainButton: {
-    position: "absolute",
-    bottom: 100,
+    marginTop: 16,
     alignSelf: "center",
     backgroundColor: "#1b263b",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
 
   buttonText: {
@@ -110,19 +115,19 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
 
-  userDetailsBox: {
-    position: "absolute",
-    bottom: 20,
-    alignSelf: "center",
-    backgroundColor: "rgba(0,0,0,0.7)",
-    padding: 12,
-    borderRadius: 8,
-    width: "90%",
-  },
-
   userDetailText: {
     color: "#ffffff",
     fontSize: 14,
     marginBottom: 4,
+  },
+
+  userDetailsBox: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+    backgroundColor: "rgba(56, 55, 55, 0.7)",
+    padding: 16,
+    borderRadius: 8,
+    width: "90%",
   },
 });

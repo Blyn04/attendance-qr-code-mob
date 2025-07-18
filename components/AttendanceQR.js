@@ -107,7 +107,7 @@ const AttendanceQR = () => {
         <Text style={styles.backButtonText}>← Back</Text>
       </TouchableOpacity>
 
-      {scanned && (
+      {/* {scanned && (
         <TouchableOpacity
           style={styles.scanAgainButton}
           onPress={() => {
@@ -117,27 +117,37 @@ const AttendanceQR = () => {
         >
           <Text style={styles.buttonText}>Scan Again</Text>
         </TouchableOpacity>
-      )}
+      )} */}
 
       {userDetails && (
-        <View style={{ padding: 16 }}>
-          <Text>📛 Full Name: {userDetails.fullName}</Text>
-          <Text>📧 Email: {userDetails.email}</Text>
-          <Text>🧑‍🏫 Section: {userDetails.section}</Text>
-          <Text>🎓 Year: {userDetails.year}</Text>
-          <Text>✅ Data Privacy: {userDetails.dataPrivacyAgreement ? "Agreed" : "Not Agreed"}</Text>
-          <Text>🎥 Video Consent: {userDetails.videoConsent ? "Yes" : "No"}</Text>
-          <Text>📷 Photo Consent: {userDetails.photoConsent ? "Yes" : "No"}</Text>
-          <Text>📩 Send Copy: {userDetails.sendCopy ? "Yes" : "No"}</Text>
+        <View style={styles.userDetailsBox}>
+          <Text style={styles.userDetailText}>Full Name: {userDetails.fullName}</Text>
+          <Text style={styles.userDetailText}>Email: {userDetails.email}</Text>
+          <Text style={styles.userDetailText}>Section: {userDetails.section}</Text>
+          <Text style={styles.userDetailText}>Year: {userDetails.year}</Text>
+          <Text style={styles.userDetailText}>Data Privacy: {userDetails.dataPrivacyAgreement ? "Agreed" : "Not Agreed"}</Text>
+          <Text style={styles.userDetailText}>Video Consent: {userDetails.videoConsent ? "Yes" : "No"}</Text>
+          <Text style={styles.userDetailText}>Photo Consent: {userDetails.photoConsent ? "Yes" : "No"}</Text>
+          <Text style={styles.userDetailText}>Send Copy: {userDetails.sendCopy ? "Yes" : "No"}</Text>
 
           {userDetails.customAnswers && Object.keys(userDetails.customAnswers).length > 0 && (
             <View style={{ marginTop: 10 }}>
-              <Text style={{ fontWeight: "bold" }}>📝 Custom Answers:</Text>
+              <Text style={[styles.userDetailText, { fontWeight: "bold", marginBottom: 6 }]}>Custom Answers:</Text>
               {Object.entries(userDetails.customAnswers).map(([question, answer]) => (
-                <Text key={question}>{question}: {answer}</Text>
+                <Text style={styles.userDetailText} key={question}>{question}: {answer}</Text>
               ))}
             </View>
           )}
+
+          <TouchableOpacity
+            style={styles.scanAgainButton}
+            onPress={() => {
+              setScanned(false);
+              setUserDetails(null);
+            }}
+          >
+            <Text style={styles.buttonText}>Scan Again</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
