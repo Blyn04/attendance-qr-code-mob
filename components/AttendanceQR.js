@@ -11,7 +11,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/AttendanceQRStyle";
 import { db } from "../config/FirebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 const AttendanceQR = () => {
   const navigation = useNavigation();
@@ -65,8 +65,15 @@ const AttendanceQR = () => {
       if (userSnap.exists()) {
         const userData = userSnap.data();
         setUserDetails(userData);
-        Alert.alert("User Found", `Name: ${userData.fullName}`);
 
+        const attendanceRef = doc(db, "events", eventId, "attendance", registrationId);
+        await setDoc(attendanceRef, {
+          ...userData,
+          registrationId,
+          timestamp: serverTimestamp(),
+        });
+
+        Alert.alert("Attendance Recorded", `Welcome ${userData.fullName}`);
       } else {
         Alert.alert("Not Found", "No registration data found.");
       }
@@ -106,18 +113,6 @@ const AttendanceQR = () => {
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>← Back</Text>
       </TouchableOpacity>
-
-      {/* {scanned && (
-        <TouchableOpacity
-          style={styles.scanAgainButton}
-          onPress={() => {
-            setScanned(false);
-            setUserDetails(null);
-          }}
-        >
-          <Text style={styles.buttonText}>Scan Again</Text>
-        </TouchableOpacity>
-      )} */}
 
       {userDetails && (
         <View style={styles.userDetailsBox}>
