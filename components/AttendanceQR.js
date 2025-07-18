@@ -11,7 +11,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/AttendanceQRStyle";
 import { db } from "../config/FirebaseConfig";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp, deleteDoc } from "firebase/firestore";
 
 const AttendanceQR = () => {
   const navigation = useNavigation();
@@ -45,6 +45,53 @@ const AttendanceQR = () => {
     }
   }, [permission]);
 
+  // const handleBarCodeScanned = async ({ data }) => {
+  //   try {
+  //     setScanned(true);
+  //     setScannedData(data);
+
+  //     const segments = data.split("/").filter(Boolean);
+  //     if (segments.length !== 4 || segments[0] !== "events" || segments[2] !== "registrations") {
+  //       Alert.alert("Invalid QR Code", "The QR code does not contain a valid registration path.");
+  //       return;
+  //     }
+
+  //     const eventId = segments[1];
+  //     const registrationId = segments[3];
+
+  //     const userRef = doc(db, "events", eventId, "registrations", registrationId);
+  //     const userSnap = await getDoc(userRef);
+
+  //     if (userSnap.exists()) {
+  //       const userData = userSnap.data();
+  //       setUserDetails(userData);
+
+  //       const attendanceRef = doc(db, "events", eventId, "attendance", registrationId);
+  //       const attendanceSnap = await getDoc(attendanceRef);
+
+  //       if (attendanceSnap.exists()) {
+  //         Alert.alert("Already Scanned", "This user has already been marked present.");
+  //         return;
+  //       }
+
+  //       await setDoc(attendanceRef, {
+  //         ...userData,
+  //         registrationId,
+  //         timestamp: serverTimestamp(),
+  //       });
+
+  //       Alert.alert("Attendance Recorded", `Welcome ${userData.fullName}`);
+        
+  //     } else {
+  //       Alert.alert("Not Found", "No registration data found.");
+  //     }
+
+  //   } catch (error) {
+  //     console.error("QR Scan Error:", error);
+  //     Alert.alert("Error", "Something went wrong while scanning the QR code.");
+  //   }
+  // };
+
   const handleBarCodeScanned = async ({ data }) => {
     try {
       setScanned(true);
@@ -74,11 +121,15 @@ const AttendanceQR = () => {
           return;
         }
 
+        // 1. Save to attendance
         await setDoc(attendanceRef, {
           ...userData,
           registrationId,
           timestamp: serverTimestamp(),
         });
+
+        // 2. Delete from registrations
+        await deleteDoc(userRef);
 
         Alert.alert("Attendance Recorded", `Welcome ${userData.fullName}`);
         
