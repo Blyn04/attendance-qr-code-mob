@@ -10,13 +10,15 @@ import {
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/AttendanceQRStyle";
+import { db } from "../config/FirebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 const AttendanceQR = () => {
   const navigation = useNavigation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [scannedData, setScannedData] = useState("");
-
+  const [userDetails, setUserDetails] = useState(null);
   const scanLineAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -25,7 +27,6 @@ const AttendanceQR = () => {
     }
   }, []);
 
-  // Animation loop for scan line
   useEffect(() => {
     const startAnimation = () => {
       scanLineAnim.setValue(0);
@@ -44,34 +45,41 @@ const AttendanceQR = () => {
     }
   }, [permission]);
 
-  const handleBarCodeScanned = ({ data }) => {
-    setScanned(true);
-    setScannedData(data);
-    Alert.alert("QR Code Scanned", `Data: ${data}`);
+  const handleBarCodeScanned = async ({ data }) => {
+    try {
+      setScanned(true);
+      setScannedData(data);
+
+      const segments = data.split("/").filter(Boolean);
+      if (segments.length !== 4 || segments[0] !== "events" || segments[2] !== "registrations") {
+        Alert.alert("Invalid QR Code", "The QR code does not contain a valid registration path.");
+        return;
+      }
+
+      const eventId = segments[1];
+      const registrationId = segments[3];
+
+      const userRef = doc(db, "events", eventId, "registrations", registrationId);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        setUserDetails(userData);
+        Alert.alert("User Found", `Name: ${userData.fullName}`);
+
+      } else {
+        Alert.alert("Not Found", "No registration data found.");
+      }
+
+    } catch (error) {
+      console.error("QR Scan Error:", error);
+      Alert.alert("Error", "Something went wrong while scanning the QR code.");
+    }
   };
-
-  if (!permission) {
-    return (
-      <View style={styles.container}>
-        <Text>Requesting camera permission...</Text>
-      </View>
-    );
-  }
-
-  if (!permission.granted) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>No access to camera</Text>
-        <TouchableOpacity style={styles.button} onPress={requestPermission}>
-          <Text style={styles.buttonText}>Allow Camera</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   const scanLineTranslateY = scanLineAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, styles.scanBox.height - 4], // scan line height
+    outputRange: [0, styles.scanBox.height - 4],
   });
 
   return (
@@ -100,14 +108,38 @@ const AttendanceQR = () => {
       </TouchableOpacity>
 
       {scanned && (
-        <TouchableOpacity style={styles.scanAgainButton} onPress={() => setScanned(false)}>
+        <TouchableOpacity
+          style={styles.scanAgainButton}
+          onPress={() => {
+            setScanned(false);
+            setUserDetails(null);
+          }}
+        >
           <Text style={styles.buttonText}>Scan Again</Text>
         </TouchableOpacity>
       )}
 
-      {scannedData ? (
-        <Text style={styles.dataText}>Scanned: {scannedData}</Text>
-      ) : null}
+      {userDetails && (
+        <View style={{ padding: 16 }}>
+          <Text>📛 Full Name: {userDetails.fullName}</Text>
+          <Text>📧 Email: {userDetails.email}</Text>
+          <Text>🧑‍🏫 Section: {userDetails.section}</Text>
+          <Text>🎓 Year: {userDetails.year}</Text>
+          <Text>✅ Data Privacy: {userDetails.dataPrivacyAgreement ? "Agreed" : "Not Agreed"}</Text>
+          <Text>🎥 Video Consent: {userDetails.videoConsent ? "Yes" : "No"}</Text>
+          <Text>📷 Photo Consent: {userDetails.photoConsent ? "Yes" : "No"}</Text>
+          <Text>📩 Send Copy: {userDetails.sendCopy ? "Yes" : "No"}</Text>
+
+          {userDetails.customAnswers && Object.keys(userDetails.customAnswers).length > 0 && (
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ fontWeight: "bold" }}>📝 Custom Answers:</Text>
+              {Object.entries(userDetails.customAnswers).map(([question, answer]) => (
+                <Text key={question}>{question}: {answer}</Text>
+              ))}
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 };

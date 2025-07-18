@@ -109,4 +109,20 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 10,
   },
+
+  userDetailsBox: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+    backgroundColor: "rgba(0,0,0,0.7)",
+    padding: 12,
+    borderRadius: 8,
+    width: "90%",
+  },
+
+  userDetailText: {
+    color: "#ffffff",
+    fontSize: 14,
+    marginBottom: 4,
+  },
 });
