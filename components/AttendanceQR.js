@@ -67,6 +67,13 @@ const AttendanceQR = () => {
         setUserDetails(userData);
 
         const attendanceRef = doc(db, "events", eventId, "attendance", registrationId);
+        const attendanceSnap = await getDoc(attendanceRef);
+
+        if (attendanceSnap.exists()) {
+          Alert.alert("Already Scanned", "This user has already been marked present.");
+          return;
+        }
+
         await setDoc(attendanceRef, {
           ...userData,
           registrationId,
@@ -74,6 +81,7 @@ const AttendanceQR = () => {
         });
 
         Alert.alert("Attendance Recorded", `Welcome ${userData.fullName}`);
+        
       } else {
         Alert.alert("Not Found", "No registration data found.");
       }
