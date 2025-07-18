@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Animated,
+  Easing,
+} from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/AttendanceQRStyle";
@@ -10,11 +17,32 @@ const AttendanceQR = () => {
   const [scanned, setScanned] = useState(false);
   const [scannedData, setScannedData] = useState("");
 
+  const scanLineAnim = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     if (!permission) {
       requestPermission();
     }
   }, []);
+
+  // Animation loop for scan line
+  useEffect(() => {
+    const startAnimation = () => {
+      scanLineAnim.setValue(0);
+      Animated.loop(
+        Animated.timing(scanLineAnim, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+    };
+
+    if (permission?.granted) {
+      startAnimation();
+    }
+  }, [permission]);
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
@@ -41,18 +69,30 @@ const AttendanceQR = () => {
     );
   }
 
+  const scanLineTranslateY = scanLineAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, styles.scanBox.height - 4], // scan line height
+  });
+
   return (
     <View style={styles.fullscreenContainer}>
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
-        }}
+        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
         style={styles.scanner}
       />
 
       <View style={styles.overlay}>
-        <View style={styles.scanBox} />
+        <View style={styles.scanBox}>
+          <Animated.View
+            style={[
+              styles.scanLine,
+              {
+                transform: [{ translateY: scanLineTranslateY }],
+              },
+            ]}
+          />
+        </View>
       </View>
 
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>

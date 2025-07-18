@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
+const SCAN_BOX_SIZE = width * 0.7;
 
 export default StyleSheet.create({
   fullscreenContainer: {
@@ -24,12 +25,22 @@ export default StyleSheet.create({
   },
 
   scanBox: {
-    width: width * 0.7,
-    height: width * 0.7,
+    width: SCAN_BOX_SIZE,
+    height: SCAN_BOX_SIZE,
     borderColor: "#ffffff",
     borderWidth: 2,
     borderRadius: 12,
     backgroundColor: "rgba(0, 0, 0, 0.2)",
+    overflow: "hidden",
+  },
+
+  scanLine: {
+    width: "100%",
+    height: 4,
+    backgroundColor: "#00ffcc",
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
 
   backButton: {
