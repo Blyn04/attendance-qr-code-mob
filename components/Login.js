@@ -33,8 +33,17 @@ const Login = () => {
     setLoading(true);
     setError("");
 
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    if (/\s/.test(trimmedEmail) || /\s/.test(trimmedPassword)) {
+      setError("Inputs must not contain spaces.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       navigation.navigate("Dashboard");
 
     } catch (err) {
@@ -42,9 +51,9 @@ const Login = () => {
         case "auth/user-not-found":
           setError("No account found with that email.");
           break;
-
+          
         case "auth/wrong-password":
-        case "auth/invalid-credential": // ✅ handle this new code
+        case "auth/invalid-credential":
           setError("Incorrect password. Please try again.");
           break;
 
@@ -68,15 +77,22 @@ const Login = () => {
   const handleReset = async () => {
     setResetMessage("");
 
-    if (!resetEmail) {
+    const trimmedResetEmail = resetEmail.trim();
+
+    if (!trimmedResetEmail) {
       setResetMessage("Please enter your email.");
       return;
     }
 
+    if (/\s/.test(trimmedResetEmail)) {
+      setResetMessage("Email must not contain spaces.");
+      return;
+    }
+
     try {
-      await sendPasswordResetEmail(auth, resetEmail);
+      await sendPasswordResetEmail(auth, trimmedResetEmail);
       setResetMessage("Password reset email sent!");
-      
+
     } catch (error) {
       setResetMessage("Error: " + error.message);
     }
@@ -100,7 +116,7 @@ const Login = () => {
           placeholder="Email"
           placeholderTextColor="#aaa"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => setEmail(text.replace(/\s/g, ""))}
           keyboardType="email-address"
           autoCapitalize="none"
           editable={!loading}
@@ -112,10 +128,11 @@ const Login = () => {
             placeholder="Password"
             placeholderTextColor="#aaa"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text.replace(/\s/g, ""))}
             secureTextEntry={!showPassword}
             editable={!loading}
           />
+
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={() => setShowPassword((prev) => !prev)}
@@ -147,21 +164,25 @@ const Login = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Reset Password</Text>
+
             <TextInput
               style={styles.input}
               placeholder="Enter your email"
               placeholderTextColor="#aaa"
               value={resetEmail}
-              onChangeText={setResetEmail}
+              onChangeText={(text) => setResetEmail(text.replace(/\s/g, ""))}
               keyboardType="email-address"
               autoCapitalize="none"
             />
+
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetButtonText}>Send Reset Email</Text>
             </TouchableOpacity>
+
             {resetMessage ? (
               <Text style={styles.resetMessage}>{resetMessage}</Text>
             ) : null}
+
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => {
