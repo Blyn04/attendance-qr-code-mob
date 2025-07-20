@@ -134,4 +134,19 @@ export default StyleSheet.create({
     textDecorationLine: "underline",
     fontSize: 16,
   },
+
+  backButton: {
+    alignSelf: "flex-start",
+    marginBottom: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    backgroundColor: "#e0e0e0",
+  },
+
+  backButtonText: {
+    color: "#0d1b2a",
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });

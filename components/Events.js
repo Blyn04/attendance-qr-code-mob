@@ -17,12 +17,14 @@ import {
 import { db } from "../config/FirebaseConfig";
 import styles from "../styles/EventsStyle";
 import dayjs from "dayjs";
+import { useNavigation } from "@react-navigation/native";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [registrations, setRegistrations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "events"), (snapshot) => {
@@ -64,6 +66,10 @@ const Events = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backButtonText}>← Back</Text>
+      </TouchableOpacity>
+
       <Text style={styles.header}>Admin Events</Text>
 
       <TextInput
