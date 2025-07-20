@@ -59,14 +59,15 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)", // translucent dark background
+    backgroundColor: "rgba(0,0,0,0.4)", // translucent background
     padding: 20,
   },
 
   modalContent: {
     backgroundColor: "#ffffff",
-    borderRadius: 12,
-    width: "100%",
+    borderRadius: 16, 
+    overflow: "hidden", 
+    width: 340, 
     maxHeight: "90%",
     padding: 20,
     shadowColor: "#000",
@@ -174,6 +175,36 @@ filterButton: {
   },
 
   filterButtonTextActive: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 20,
+    borderRadius: 10,
+    backgroundColor: "#f0f0f0",
+    overflow: "hidden",
+  },
+
+  tabButton: {
+    flex: 1,
+    paddingVertical: 10,
+    backgroundColor: "#e0e0e0",
+    alignItems: "center",
+  },
+
+  tabButtonActive: {
+    backgroundColor: "#1b263b",
+  },
+
+  tabButtonText: {
+    color: "#333",
+    fontWeight: "500",
+  },
+
+  tabButtonTextActive: {
     color: "#fff",
     fontWeight: "600",
   },

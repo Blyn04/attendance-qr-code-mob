@@ -25,6 +25,8 @@ const Events = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all"); 
+  const [attendees, setAttendees] = useState([]);
+  const [activeTab, setActiveTab] = useState("registrations"); 
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -42,9 +44,14 @@ const Events = () => {
 
   const openEventDetails = async (event) => {
     setSelectedEvent(event);
+
     const regSnapshot = await getDocs(collection(db, "events", event.id, "registrations"));
     const regList = regSnapshot.docs.map((doc) => doc.data());
     setRegistrations(regList);
+
+    const attSnapshot = await getDocs(collection(db, "events", event.id, "attendance"));
+    const attList = attSnapshot.docs.map((doc) => doc.data());
+    setAttendees(attList);
   };
 
   const renderEvent = ({ item }) => (
@@ -137,17 +144,63 @@ const filteredEvents = events
             <Text>
               Time: {selectedEvent?.startTime} - {selectedEvent?.endTime}
             </Text>
+
             <Text>
               Form Closes: {dayjs(selectedEvent?.formDeadline).format("YYYY-MM-DD HH:mm")}
             </Text>
-            <Text style={styles.sectionTitle}>Registrations ({registrations.length})</Text>
 
-            {registrations.length === 0 ? (
-              <Text>No one has registered yet.</Text>
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === "registrations" && styles.tabButtonActive]}
+                onPress={() => setActiveTab("registrations")}
+              >
+                <Text
+                  style={[
+                    styles.tabButtonText,
+                    activeTab === "registrations" && styles.tabButtonTextActive,
+                  ]}
+                >
+                  Registrations ({registrations.length})
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === "attendees" && styles.tabButtonActive]}
+                onPress={() => setActiveTab("attendees")}
+              >
+                <Text
+                  style={[
+                    styles.tabButtonText,
+                    activeTab === "attendees" && styles.tabButtonTextActive,
+                  ]}
+                >
+                  Attendees ({attendees.length})
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {activeTab === "registrations" ? (
+              <>
+                <Text style={styles.sectionTitle}>Registrations ({registrations.length})</Text>
+                {registrations.length === 0 ? (
+                  <Text>No one has registered yet.</Text>
+                ) : (
+                  registrations.map((reg, idx) => (
+                    <Text key={idx}>• {reg.fullName} ({reg.email})</Text>
+                  ))
+                )}
+              </>
             ) : (
-              registrations.map((reg, idx) => (
-                <Text key={idx}>• {reg.fullName} ({reg.email})</Text>
-              ))
+              <>
+                <Text style={styles.sectionTitle}>Attendees ({attendees.length})</Text>
+                {attendees.length === 0 ? (
+                  <Text>No attendees yet.</Text>
+                ) : (
+                  attendees.map((att, idx) => (
+                    <Text key={idx}>✓ {att.fullName} ({att.email})</Text>
+                  ))
+                )}
+              </>
             )}
 
             <TouchableOpacity style={styles.cancelButton} onPress={() => setSelectedEvent(null)}>
