@@ -149,4 +149,33 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+
+  filterBar: {
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: 12,
+  gap: 10,
+},
+
+filterButton: {
+  paddingVertical: 8,
+  paddingHorizontal: 16,
+  backgroundColor: "#e0e0e0",
+  borderRadius: 20,
+},
+
+  filterButtonActive: {
+    backgroundColor: "#1b263b",
+  },
+
+  filterButtonText: {
+    fontSize: 14,
+    color: "#333",
+  },
+
+  filterButtonTextActive: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+
 });

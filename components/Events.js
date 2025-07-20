@@ -24,6 +24,7 @@ const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [registrations, setRegistrations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("all"); 
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -55,22 +56,58 @@ const Events = () => {
     </TouchableOpacity>
   );
 
-  const filteredEvents = events.filter((event) => {
+const filteredEvents = events
+  .filter((event) => {
     const title = event.title || "";
     const room = event.room || "";
     return (
-        title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        room.toLowerCase().includes(searchQuery.toLowerCase())
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      room.toLowerCase().includes(searchQuery.toLowerCase())
     );
+  })
+  .filter((event) => {
+    const isPast = dayjs(event.date).isBefore(dayjs(), "day");
+    if (filter === "upcoming") return !isPast;
+    if (filter === "past") return isPast;
+    return true; 
   });
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backButtonText}>← Back</Text>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
 
       <Text style={styles.header}>Admin Events</Text>
+
+      <View style={styles.filterBar}>
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "all" && styles.filterButtonActive]}
+          onPress={() => setFilter("all")}
+        >
+          <Text style={[styles.filterButtonText, filter === "all" && styles.filterButtonTextActive]}>
+            All
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "upcoming" && styles.filterButtonActive]}
+          onPress={() => setFilter("upcoming")}
+        >
+          <Text style={[styles.filterButtonText, filter === "upcoming" && styles.filterButtonTextActive]}>
+            Upcoming
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "past" && styles.filterButtonActive]}
+          onPress={() => setFilter("past")}
+        >
+          <Text style={[styles.filterButtonText, filter === "past" && styles.filterButtonTextActive]}>
+            Past
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <TextInput
         style={styles.input}
@@ -86,7 +123,6 @@ const Events = () => {
         contentContainerStyle={styles.eventList}
       />
 
-      {/* Selected Event Details */}
       <Modal
         visible={!!selectedEvent}
         animationType="slide"
