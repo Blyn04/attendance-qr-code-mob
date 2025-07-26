@@ -117,6 +117,9 @@ const Login = () => {
           placeholderTextColor="#aaa"
           value={email}
           onChangeText={(text) => setEmail(text.replace(/\s/g, ""))}
+          onKeyPress={({ nativeEvent }) => {
+            if (nativeEvent.key === " ") return;
+          }}
           keyboardType="email-address"
           autoCapitalize="none"
           editable={!loading}
@@ -129,6 +132,9 @@ const Login = () => {
             placeholderTextColor="#aaa"
             value={password}
             onChangeText={(text) => setPassword(text.replace(/\s/g, ""))}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === " ") return;
+            }}
             secureTextEntry={!showPassword}
             editable={!loading}
           />
@@ -171,6 +177,9 @@ const Login = () => {
               placeholderTextColor="#aaa"
               value={resetEmail}
               onChangeText={(text) => setResetEmail(text.replace(/\s/g, ""))}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === " ") return;
+              }}
               keyboardType="email-address"
               autoCapitalize="none"
             />
